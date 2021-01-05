@@ -43,7 +43,7 @@ public class ConfigUtils {
         plug.getConfig().addDefault("Discord.Message.Footer", "Powered by MinetopiaSDB.nl");
 
         for (ShowOption so : ShowOption.values()) {
-            if (so == ShowOption.RANK || so == ShowOption.GRAYCOIN) {
+            if (so == ShowOption.GRAYSHARD || so == ShowOption.GOLDSHARD || so == ShowOption.GRAYCOIN) {
                 plug.getConfig().addDefault("Discord.StatCMD.Show" + so.toString(), false);
             } else {
                 plug.getConfig().addDefault("Discord.StatCMD.Show" + so.toString(), true);
@@ -55,10 +55,11 @@ public class ConfigUtils {
         plug.getConfig().addDefault("Discord.StatCMD.Title" + ShowOption.PREFIX.toString(), "Baan");
         plug.getConfig().addDefault("Discord.StatCMD.Title" + ShowOption.ONLINETIME.toString(), "Speeltijd");
         plug.getConfig().addDefault("Discord.StatCMD.Title" + ShowOption.LEVEL.toString(), "Level");
-        plug.getConfig().addDefault("Discord.StatCMD.Title" + ShowOption.RANK.toString(), "Rank");
         plug.getConfig().addDefault("Discord.StatCMD.Title" + ShowOption.ONLINESTATUS.toString(), "Op dit moment online?");
         plug.getConfig().addDefault("Discord.StatCMD.Title" + ShowOption.GRAYCOIN.toString(), "GrayCoins");
         plug.getConfig().addDefault("Discord.StatCMD.Title" + ShowOption.LUCKYSHARD.toString(), "LuckyShards");
+        plug.getConfig().addDefault("Discord.StatCMD.Title" + ShowOption.GRAYSHARD.toString(), "GrayShards");
+        plug.getConfig().addDefault("Discord.StatCMD.Title" + ShowOption.GOLDSHARD.toString(), "GoldShards");
 
 
         plug.getConfig().options().copyDefaults(true);
@@ -111,6 +112,6 @@ public class ConfigUtils {
 
 
     public enum ShowOption {
-        FITHEID, MONEY, PREFIX, ONLINETIME, LEVEL, RANK, ONLINESTATUS, GRAYCOIN, LUCKYSHARD;
+        FITHEID, MONEY, PREFIX, ONLINETIME, LEVEL, ONLINESTATUS, GRAYCOIN, LUCKYSHARD, GRAYSHARD, GOLDSHARD;
     }
 }
