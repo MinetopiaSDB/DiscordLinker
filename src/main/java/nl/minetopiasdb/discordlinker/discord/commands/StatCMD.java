@@ -5,8 +5,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import nl.minetopiasdb.api.API;
-import nl.minetopiasdb.api.SDBPlayer;
-import nl.minetopiasdb.api.enums.TimeType;
+import nl.minetopiasdb.api.playerdata.PlayerManager;
+import nl.minetopiasdb.api.playerdata.objects.OfflineSDBPlayer;
 import nl.minetopiasdb.discordlinker.Main;
 import nl.minetopiasdb.discordlinker.utils.MessageUtils;
 import nl.minetopiasdb.discordlinker.utils.commands.BotCommand;
@@ -59,7 +59,7 @@ public class StatCMD implements BotCommand {
         }
 
         OfflinePlayer p = Bukkit.getOfflinePlayer(DataLinkUtils.getInstance().getUUIDFromDiscord(userId));
-        SDBPlayer sdb = SDBPlayer.createSDBPlayer(p);
+        OfflineSDBPlayer sdb = PlayerManager.getOfflinePlayer(p.getUniqueId());
         Plugin pl = Bukkit.getPluginManager().getPlugin("MinetopiaSDB");
 
         EmbedBuilder embed = MessageUtils.getBuilder(Color.GREEN);
@@ -68,13 +68,10 @@ public class StatCMD implements BotCommand {
         ConfigUtils cu = ConfigUtils.getInstance();
 
         if (cu.getShowOption(ShowOption.FITHEID)) {
-            embed.addField(cu.getShowTitle(ShowOption.FITHEID), sdb.getFitheid() + "/" + pl.getConfig().getString("Fitheid.Max"), false);
+            embed.addField(cu.getShowTitle(ShowOption.FITHEID), sdb.getFitness().getTotalFitness() + "/" + pl.getConfig().getString("Fitness.Max"), false);
         }
         if (cu.getShowOption(ShowOption.PREFIX)) {
             embed.addField(cu.getShowTitle(ShowOption.PREFIX), sdb.getPrefix(), false);
-        }
-        if (cu.getShowOption(ShowOption.RANK)) {
-            embed.addField(cu.getShowTitle(ShowOption.RANK), sdb.getRank(), false);
         }
         if (cu.getShowOption(ShowOption.LEVEL)) {
             embed.addField(cu.getShowTitle(ShowOption.LEVEL), "" + sdb.getLevel(), false);
@@ -83,8 +80,8 @@ public class StatCMD implements BotCommand {
             embed.addField(cu.getShowTitle(ShowOption.MONEY), "€ " + format(API.getEcon().getBalance(p)), false);
         }
         if (cu.getShowOption(ShowOption.ONLINETIME)) {
-            embed.addField(cu.getShowTitle(ShowOption.ONLINETIME), "" + sdb.getTime(TimeType.DAYS) + " dagen, "
-                    + sdb.getTime(TimeType.HOURS) + " uur, " + sdb.getTime(TimeType.MINUTES) + " minuten", false);
+            embed.addField(cu.getShowTitle(ShowOption.ONLINETIME), "" + sdb.getTimeDays() + " dagen, "
+                    + sdb.getTimeHours() + " uur, " + sdb.getTimeMinutes() + " minuten", false);
         }
         if (cu.getShowOption(ShowOption.ONLINESTATUS)) {
             embed.addField(cu.getShowTitle(ShowOption.ONLINESTATUS), p.isOnline() ? "Ja" : "Nee", false);
@@ -93,7 +90,13 @@ public class StatCMD implements BotCommand {
             embed.addField(cu.getShowTitle(ShowOption.GRAYCOIN), "" + sdb.getGrayCoins(), false);
         }
         if (cu.getShowOption(ShowOption.LUCKYSHARD)) {
-            embed.addField(cu.getShowTitle(ShowOption.LUCKYSHARD), "" + sdb.getShards(), false);
+            embed.addField(cu.getShowTitle(ShowOption.LUCKYSHARD), "" + sdb.getLuckyShardsFormatted(), false);
+        }
+        if (cu.getShowOption(ShowOption.GOLDSHARD)) {
+            embed.addField(cu.getShowTitle(ShowOption.GOLDSHARD), "" + sdb.getGoldShardsFormatted(), false);
+        }
+        if (cu.getShowOption(ShowOption.GRAYSHARD)) {
+            embed.addField(cu.getShowTitle(ShowOption.GRAYSHARD), "" + sdb.getGrayShardsFormatted(), false);
         }
 
         event.getChannel().sendMessage(embed.build()).queue();
